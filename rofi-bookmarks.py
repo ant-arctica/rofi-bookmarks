@@ -82,7 +82,7 @@ def write_rofi_input(profile_loc, search_path=[], sep=' / '):
 
 if __name__ == "__main__":
     parser = ArgumentParser(description="generate list of bookmarks with icons for rofi")
-    parser.add_argument('dir',               default="",    nargs='?',      help="restrict list to a bookmark folder")
+    parser.add_argument('path',              default="",    nargs='?',      help="restrict list to a bookmark folder")
     parser.add_argument('-s', '--separator', default=" / ", metavar='sep',  help="seperator for paths")
     parser.add_argument('-p', '--profile',                  metavar='prof', help="firefox profile to use")
     args, _ = parser.parse_known_args()   # rofi gives us selected entry as additional argument -> ignore (not useful)
@@ -91,7 +91,7 @@ if __name__ == "__main__":
         prof = [] if args.profile is None else ["-P", args.profile]
         subprocess.Popen(["firefox", environ['ROFI_INFO']] + prof, close_fds=True, start_new_session=True, stdout=subprocess.DEVNULL)
     else:
-        search_path = [i for i in args.dir.split('/') if i != '']
+        search_path = [i for i in args.path.split('/') if i != '']
         profile_path = default_profile_path() if args.profile is None else path_from_name(args.profile)
 
         print("\x00prompt\x1f ")  # change prompt

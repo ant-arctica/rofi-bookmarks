@@ -11,7 +11,7 @@ from contextlib import closing, contextmanager, suppress
 from tempfile import NamedTemporaryFile
 from shutil import copyfile
 
-cache_dir = Path(environ.get('XDG_CACHE_HOME', Path.home() / '.cache')) / 'rofi-firefox-icons'
+cache_dir = Path(environ.get('XDG_CACHE_HOME', Path.home() / '.cache')) / 'rofi-bookmarks'
 firefox_dir = Path.home() / '.mozilla/firefox'
 
 # b/c sqlite databases are locked by firefox we need copy them into a temporary location and connect to them there
@@ -42,7 +42,7 @@ def path_from_name(name):
                 return firefox_dir / i['Path']
     raise Exception("no profile with this name")
 
-# add icon file to cache (in ~/.cache/rofi-firefox-icons)
+# add icon file to cache (in ~/.cache/rofi-bookmarks)
 def cache_icon(icon):
     loc = cache_dir / sha256(icon).hexdigest()
     if not loc.exists():

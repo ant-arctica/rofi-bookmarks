@@ -45,6 +45,8 @@ def path_from_name(name):
 # add icon file to cache (in ~/.cache/rofi-bookmarks)
 def cache_icon(icon):
     loc = cache_dir / sha256(icon).hexdigest()
+    if not cache_dir.exists():
+        cache_dir.mkdir()
     if not loc.exists():
         loc.write_bytes(icon)
     return loc

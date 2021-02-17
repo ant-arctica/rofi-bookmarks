@@ -14,13 +14,16 @@ from shutil import copyfile
 cache_dir = Path(environ.get('XDG_CACHE_HOME', Path.home() / '.cache')) / 'rofi-firefox-icons'
 firefox_dir = Path.home() / '.mozilla/firefox'
 
-@contextmanager   # b/c sqlite databases are locked by firefox we need copy them into a temporary location and connect to them there
+# b/c sqlite databases are locked by firefox we need copy them into a temporary location and connect to them there
+@contextmanager
 def temp_sqlite(path):
     with NamedTemporaryFile() as temp_loc:
         copyfile(path, temp_loc.name)
         with closing(sqlite3.connect(temp_loc.name)) as conn:
             yield conn
 
+# go through all installs and chose first profile you find.
+# better option would be to use install (which firefox) but that would add a dependency on cityhash
 def default_profile_path():
     installs = ConfigParser()
     installs.read(firefox_dir / 'installs.ini')
@@ -29,6 +32,7 @@ def default_profile_path():
             return firefox_dir / i['Default']
     raise Exception("could not find a default profile in installs.ini")
 
+# get Path to profile directory from profil name
 def path_from_name(name):
     profiles = ConfigParser()
     profiles.read(firefox_dir / 'profiles.ini')
@@ -38,12 +42,14 @@ def path_from_name(name):
                 return firefox_dir / i['Path']
     raise Exception("no profile with this name")
 
+# add icon file to cache (in ~/.cache/rofi-firefox-icons)
 def cache_icon(icon):
     loc = cache_dir / sha256(icon).hexdigest()
     if not loc.exists():
         loc.write_bytes(icon)
     return loc
 
+# main function, finds all bookmaks inside of search_path and their corresponding icons and prints them in a rofi readable form
 def write_rofi_input(profile_loc, search_path=[], sep=' / '):
     with temp_sqlite(profile_loc / 'places.sqlite') as places:
         conn_res = places.execute("""SELECT moz_bookmarks.id, moz_bookmarks.parent, moz_bookmarks.type, moz_bookmarks.title, moz_places.url

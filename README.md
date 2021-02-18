@@ -1,6 +1,8 @@
 # rofi-bookmarks
 Small python script to show firefox bookmarks with rofi
 
+![rofi-bookmarks showcase](images/rofi-bookmarks_showcase.png)
+
 ## Features
 * Icons!
 * Only show bookmarks in a specified bookmark folder

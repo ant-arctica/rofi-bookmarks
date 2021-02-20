@@ -1,5 +1,5 @@
 # rofi-bookmarks
-Small python script to show firefox bookmarks with rofi
+Small python script to open firefox bookmarks with rofi.
 
 ![rofi-bookmarks showcase](images/rofi-bookmarks_showcase.png)
 
